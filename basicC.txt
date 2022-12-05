@@ -3,6 +3,9 @@ int afor,bread,cwrite;
 read a;
 read b;
 
+c = 193;
+write c;
+
 c = a + b;
 write c;
 
