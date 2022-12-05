@@ -1,0 +1,29 @@
+﻿Start with one empty node in the tree
+
+If token == terminal
+{
+	Set current node’s value to token
+	Move current node's cursor to parent or create a parent if it does not exist
+	Goto next token
+}
+
+If token == symbol
+{
+	If current node == empty
+	{
+		Set value of current node to token
+		Create a left child and move current node's cursor to it
+		Goto next token
+	}
+	else
+	{
+		Insert right parent to the current node and move to it
+		Set current node's value to token
+		
+		If(current node's priority < parent node's priority)
+		{
+			// TODO: Complete this
+		}
+		
+	}
+}

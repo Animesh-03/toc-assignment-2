@@ -1,0 +1,15 @@
+int afor,bread,cwrite;
+
+read a;
+read b;
+
+c = a + b;
+write c;
+
+c = a > b;
+write c;
+
+c == a;
+write c;
+
+write c;
