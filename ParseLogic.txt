@@ -7,7 +7,7 @@ If token == terminal
 	Goto next token
 }
 
-If token == symbol
+If token == symbol (symbol = variable/constant)
 {
 	If current node == empty
 	{
@@ -19,11 +19,13 @@ If token == symbol
 	{
 		Insert right parent to the current node and move to it
 		Set current node's value to token
+		Set current node to parent node
 		
-		If(current node's priority < parent node's priority)
+		while(current node's priority < parent node's priority)
 		{
-			// TODO: Complete this
+			Make current node right parent of parent node
+			Make current node's left child right child of left child
 		}
-		
+		Create an empty right child of current node
 	}
 }

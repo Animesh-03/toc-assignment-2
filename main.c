@@ -8,6 +8,8 @@
 #include "includes/tokens.h"
 #include "includes/tokenizer.h"
 
+#define MAX_CODE_LENGTH 100000
+
 char* filename;
 FILE* f;
 
@@ -16,15 +18,20 @@ TokenList variableLookup;
 
 int main(int argc, char** argv) {
 
-    filename = "basicC.txt";
+    filename = argv[1];
     f = fopen(filename, "r");
+    if(f == NULL)
+    {
+        perror("Input file not found");
+        exit(1);
+    }
 
-    char codeStr[100000]; 
-    fread(codeStr, 100000, 1, f);
+    char codeStr[MAX_CODE_LENGTH]; 
+    fread(codeStr, MAX_CODE_LENGTH, 1, f);
 
     tokenize(codeStr);
 
 
     
-    return EXIT_SUCCESS;
+    return 0;
 }
