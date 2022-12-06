@@ -7,18 +7,23 @@
 
 #include "includes/tokens.h"
 #include "includes/tokenizer.h"
+#include "includes/variable.h"
 
 #define MAX_CODE_LENGTH 100000
+#define MAX_STATEMENT_NUMBER 100
 
 char* filename;
 FILE* f;
 
-TokenList tokenList;
-TokenList variableLookup;
+Statement statementList[MAX_STATEMENT_NUMBER];
+int nStatements = 0;
+
+VariableList varList;
 
 int main(int argc, char** argv) {
 
     filename = argv[1];
+    filename = "basicC.txt";
     f = fopen(filename, "r");
     if(f == NULL)
     {
@@ -27,9 +32,19 @@ int main(int argc, char** argv) {
     }
 
     char codeStr[MAX_CODE_LENGTH]; 
-    fread(codeStr, MAX_CODE_LENGTH, 1, f);
+    char declareStatement[100];
 
-    tokenize(codeStr);
+    fgets(declareStatement, 100, f);
+    int declareStatus = tokenizeVariables(declareStatement, &varList);
+    if(declareStatus != 0)
+    {
+        printf("Compilation Failed. Exiting\n");
+        return 1;
+    }
+    printAllVariables(&varList);
+
+    fread(codeStr, MAX_CODE_LENGTH, 1, f);
+    tokenizeStatements(codeStr);
 
 
     
