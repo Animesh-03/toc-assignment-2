@@ -15,7 +15,7 @@
 char* filename;
 FILE* f;
 
-Statement statementList[MAX_STATEMENT_NUMBER];
+StatementList statementList;
 int nStatements = 0;
 
 VariableList varList;
@@ -44,8 +44,8 @@ int main(int argc, char** argv) {
     printAllVariables(&varList);
 
     fread(codeStr, MAX_CODE_LENGTH, 1, f);
-    tokenizeStatements(codeStr);
-
+    tokenizeStatements(codeStr, &statementList);
+    printAllStatments(&statementList);
 
     
     return 0;

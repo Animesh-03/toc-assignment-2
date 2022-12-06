@@ -1,7 +1,7 @@
 #ifndef TOKENS_H
 #define TOKENS_H
 
-enum TokenType {KEYWORD, VARIABLE, CONSTANT, PARANTHESES};
+enum TokenType {KEYWORD, VARIABLE, CONSTANT, PARANTHESES, OPERATOR};
 
 typedef enum TokenType TokenType;
 
@@ -40,6 +40,16 @@ struct stmtList {
 
 typedef struct stmtList StatementList;
 
+void addEmptyStatement(StatementList* statementList)
+{
+    statementList->len++;
+}
+
+void addTokenToLastStatement(StatementList* statementList, char* name, TokenType type)
+{
+    addToken(&statementList->list[statementList->len], name, type);
+}
+
 void nextStatment(StatementList* statementList)
 {
     statementList->cursor++;
@@ -48,6 +58,22 @@ void nextStatment(StatementList* statementList)
 void resetStatementListCursor(StatementList* statementList)
 {
     statementList->cursor = 0;
+}
+
+void printAllStatments(StatementList* statementList)
+{
+    printf("\nPrinting all tokens in code\n");
+    printf("Number of statments: %d\n", statementList->len);
+    for(int i = 0; i < statementList->len; i++)
+    {
+        printf("%d. [ ", i+1);
+        for(int j = 0; j < statementList->list[i].len - 1; j++)
+        {
+            printf("'%s', ", statementList->list[i].list[j].name);
+        }
+        printf("'%s' ", statementList->list[i].list[statementList->list[i].len - 1].name);
+        printf("]\n");
+    }
 }
 
 

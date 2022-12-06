@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 #include "variable.h"
+#include "tokens.h"
 
 // Returns 'true' if the character is an OPERATOR.
 bool isOperator(char ch)
@@ -100,7 +101,7 @@ int tokenizeVariables(char* str, VariableList* varList)
 
 			if (isKeyword(subStr) == true && !strcmp(subStr, "int"))
 			{
-				printf("'%s' Keyword found\n", subStr);
+				// printf("'%s' Keyword found\n", subStr);
 				foundIntKeyword = 1;
 			}
 			else if (validIdentifier(subStr) == true && isDelimiter(str[right - 1]) == false)
@@ -111,7 +112,7 @@ int tokenizeVariables(char* str, VariableList* varList)
 					return -1;
 				}
 
-				printf("'%s' IS A VALID IDENTIFIER\n", subStr);
+				// printf("'%s' IS A VALID IDENTIFIER\n", subStr);
 				int status = addVariable(varList, subStr);
 				if(status == VAR_ALREADY_EXISTS)
 				{
@@ -132,7 +133,7 @@ int tokenizeVariables(char* str, VariableList* varList)
 }
 
 // Parsing the input STRING.
-void tokenizeStatements(char* str)
+int tokenizeStatements(char* str, StatementList* statementList)
 {
 	int left = 0, right = 0;
 	int len = strlen(str);
@@ -153,12 +154,19 @@ void tokenizeStatements(char* str)
             if(str[right] == '=' && str[right+1] == '=')
             {
                 right++;
-                printf("'%s' is a logical equals operator\n", subString(str, left, right));
+				char* subsStr = subString(str, left, right);
+                // printf("'%s' is a logical equals operator\n", subsStr);
+				addTokenToLastStatement(statementList, subsStr, OPERATOR);
                 right++;
                 left = right;
             }
 			else if (isOperator(str[right]) == true)
-				printf("'%c' IS AN OPERATOR\n", str[right]);
+			{
+				// printf("'%c' IS AN OPERATOR\n", str[right]);
+				char* subStr = subString(str, right, right);
+				addTokenToLastStatement(statementList, subStr, OPERATOR);
+			}
+				
 
 			right++;
 			left = right;
@@ -170,23 +178,34 @@ void tokenizeStatements(char* str)
 			char* subStr = subString(str, left, right - 1);
 
 			if (isKeyword(subStr) == true)
-				printf("'%s' IS A KEYWORD\n", subStr);
-
+			{
+				// printf("'%s' IS A KEYWORD\n", subStr);
+				addTokenToLastStatement(statementList, subStr, KEYWORD);
+			}
 			else if (isInteger(subStr) == true)
-				printf("'%s' IS AN INTEGER\n", subStr);
-
-			else if (validIdentifier(subStr) == true
-					&& isDelimiter(str[right - 1]) == false)
-				printf("'%s' IS A VALID IDENTIFIER\n", subStr);
-
-			else if (validIdentifier(subStr) == false
-					&& isDelimiter(str[right - 1]) == false)
-				printf("'%s' IS NOT A VALID IDENTIFIER\n", subStr);
+			{
+				// printf("'%s' IS AN INTEGER\n", subStr);
+				addTokenToLastStatement(statementList, subStr, CONSTANT);
+			}
+			else if (validIdentifier(subStr) == true && isDelimiter(str[right - 1]) == false)
+			{
+				// printf("'%s' IS A VALID IDENTIFIER\n", subStr);
+				addTokenToLastStatement(statementList, subStr, VARIABLE);
+			}
+			else if (validIdentifier(subStr) == false && isDelimiter(str[right - 1]) == false)
+			{
+				// printf("'%s' IS NOT A VALID IDENTIFIER\n", subStr);
+				return -1;
+			}
 
 			left = right;
+			if(str[right] == ';')
+			{
+				addEmptyStatement(statementList);
+			}
 		}
 	}
-	return;
+	return 0;
 }
 
 #endif
