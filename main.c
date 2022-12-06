@@ -38,13 +38,18 @@ int main(int argc, char** argv) {
     int declareStatus = tokenizeVariables(declareStatement, &varList);
     if(declareStatus != 0)
     {
-        printf("Compilation Failed. Exiting\n");
+        printf("Declaration Statement is Incorrect. Exiting\n");
         return 1;
     }
     printAllVariables(&varList);
 
     fread(codeStr, MAX_CODE_LENGTH, 1, f);
-    tokenizeStatements(codeStr, &statementList);
+    int compileStatus = tokenizeStatements(codeStr, &statementList, &varList);
+    if(compileStatus != 0)
+    {
+        printf("Compilation Failed. Exiting\n");
+        return 1;
+    }
     printAllStatments(&statementList);
 
     

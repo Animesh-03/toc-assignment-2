@@ -133,7 +133,7 @@ int tokenizeVariables(char* str, VariableList* varList)
 }
 
 // Parsing the input STRING.
-int tokenizeStatements(char* str, StatementList* statementList)
+int tokenizeStatements(char* str, StatementList* statementList, VariableList* varList)
 {
 	int left = 0, right = 0;
 	int len = strlen(str);
@@ -190,6 +190,12 @@ int tokenizeStatements(char* str, StatementList* statementList)
 			else if (validIdentifier(subStr) == true && isDelimiter(str[right - 1]) == false)
 			{
 				// printf("'%s' IS A VALID IDENTIFIER\n", subStr);
+				int varExists = findVariable(varList, subStr);
+				if(varExists == VAR_NOT_FOUND)
+				{
+					printf("The variable '%s' is not found.\n", subStr);
+					return -1;
+				}
 				addTokenToLastStatement(statementList, subStr, VARIABLE);
 			}
 			else if (validIdentifier(subStr) == false && isDelimiter(str[right - 1]) == false)
@@ -199,6 +205,7 @@ int tokenizeStatements(char* str, StatementList* statementList)
 			}
 
 			left = right;
+			// If the delimter is a ; then create a new empty statement
 			if(str[right] == ';')
 			{
 				addEmptyStatement(statementList);

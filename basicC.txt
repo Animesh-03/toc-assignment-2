@@ -1,4 +1,4 @@
-int afor,bread,cwrite;
+int a,b,c;
 
 read a;
 read b;
@@ -13,6 +13,6 @@ c = a > b;
 write c;
 
 c == a;
-write c;
+write d;
 
 write c;
