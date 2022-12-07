@@ -160,6 +160,21 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
                 right++;
                 left = right;
             }
+			else if(str[right] == '(' || str[right] == ')')
+			{
+				char* subsStr = subString(str, right, right);
+				addTokenToLastStatement(statementList, subsStr, PARANTHESES);
+                left = right;
+			}
+			else if(str[right] == '{' || str[right] == '}')
+			{
+				char* subsStr = subString(str, right, right);
+				addEmptyStatement(statementList);
+				addTokenToLastStatement(statementList, subsStr, CURLY_BRACKETS);
+				addEmptyStatement(statementList);
+				right++;
+                left = right;
+			}
 			else if (isOperator(str[right]) == true)
 			{
 				// printf("'%c' IS AN OPERATOR\n", str[right]);
@@ -200,7 +215,7 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 			}
 			else if (validIdentifier(subStr) == false && isDelimiter(str[right - 1]) == false)
 			{
-				// printf("'%s' IS NOT A VALID IDENTIFIER\n", subStr);
+				printf("'%s' IS NOT A VALID IDENTIFIER\n", subStr);
 				return -1;
 			}
 

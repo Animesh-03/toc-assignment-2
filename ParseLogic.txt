@@ -7,7 +7,7 @@ If token == terminal
 	Goto next token
 }
 
-If token == symbol (symbol = variable/constant)
+If token == symbol (symbol = operator)
 {
 	If current node == empty
 	{
