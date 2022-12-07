@@ -1,18 +1,8 @@
 int a,b,c;
 
-read a;
-read b;
-
-c = 193;
-write c;
-
-c = a + b;
-write c;
-
-c = a > b;
-write c;
-
-c == a;
-write d;
+for(a = 0; 3 > a; a = a + 1) {
+    b = b + 1;
+    c = ( c + * b*c);
+}
 
 write c;

@@ -2,7 +2,7 @@
 #define TOKENS_H
 
 // The types a token can be
-enum TokenType {KEYWORD, VARIABLE, CONSTANT, PARANTHESES, OPERATOR};
+enum TokenType {KEYWORD, VARIABLE, CONSTANT, PARANTHESES, CURLY_BRACKETS, OPERATOR};
 
 typedef enum TokenType TokenType;
 
