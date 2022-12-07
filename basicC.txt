@@ -3,16 +3,8 @@ int a,b,c;
 read a;
 read b;
 
-c = 193;
+c = a+(b+(a+c));
 write c;
 
-c = a + b;
-write c;
-
-c = a > b;
-write c;
-
-c == a;
-write d;
 
 write c;
