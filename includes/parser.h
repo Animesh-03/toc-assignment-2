@@ -325,6 +325,8 @@ int parseStatement( StatementList* statementList,int index, Node* root)
                 parseStatement(statementList, newIndex, snippetNode);
                 newIndex++;
             }
+            pushChild(forStmt, closedCurlyBracketNode);
+            
             return newIndex - index;
         }
         else if(statement->type == IO)

@@ -2,6 +2,6 @@ int a,b,c;
 
 for(a = 0; 10 > a; a = a + 1)
 {
-    b = b*a;
+    b = (b*a);
     c = (b + c)/a;
 }
