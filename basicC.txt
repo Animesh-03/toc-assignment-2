@@ -1,12 +1,10 @@
 int a,b,c;
 
-read a;
-read b;
+c =  a + b;
+write a;
+b = a * (b + c);
+a = a - b*c;
 
-c =  a > b > c;
 
-write c;
-
-for(c = 1; 5 > c; c = c + 1) { a = a + c };
 
 write c;

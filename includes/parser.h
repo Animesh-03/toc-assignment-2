@@ -277,12 +277,14 @@ void parseAllStatements(StatementList* statementList, Node* root)
         if(statement->type == ASSIGNMENT)
         {
             Node* assignmentNode = newNode("assign_stmt");
-            Node* leftVar = newNode(statement->list[0].name);
+            Node* leftVar = newNode("var");
+            Node* leftTerminal = newNode(statement->list[0].name);
             Node* equalsNode = newNode("=");
             Node* expressionNode = newNode("expr");
 
             pushChild(root, assignmentNode);
             pushChild(assignmentNode, leftVar);
+            pushChild(leftVar, leftTerminal);
             pushChild(assignmentNode, equalsNode);
             pushChild(assignmentNode, expressionNode);
 
@@ -300,7 +302,7 @@ void parseAllStatements(StatementList* statementList, Node* root)
 
             pushChild(root, ioNode);
             pushChild(ioNode, ioTypeNode);
-            pushChild(ioTypeNode, terminalNode);
+            pushChild(ioNode, terminalNode);
         }
 
     }
