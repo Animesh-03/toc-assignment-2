@@ -3,7 +3,8 @@ int a,b,c;
 read a;
 read b;
 
-c = a+(b+(a+c));
+c = ((((a) + (b))));
+
 write c;
 
 

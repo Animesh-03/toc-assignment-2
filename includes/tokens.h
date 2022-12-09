@@ -1,6 +1,8 @@
 #ifndef TOKENS_H
 #define TOKENS_H
 
+#include <string.h>
+
 // The types a token can be
 enum TokenType {KEYWORD, VARIABLE, CONSTANT, PARANTHESES, CURLY_BRACKETS, OPERATOR};
 

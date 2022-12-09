@@ -157,14 +157,11 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 				char* subsStr = subString(str, left, right);
                 // printf("'%s' is a logical equals operator\n", subsStr);
 				addTokenToLastStatement(statementList, subsStr, OPERATOR);
-                right++;
-                left = right;
             }
 			else if(str[right] == '(' || str[right] == ')')
 			{
 				char* subsStr = subString(str, right, right);
 				addTokenToLastStatement(statementList, subsStr, PARANTHESES);
-                left = right;
 			}
 			else if(str[right] == '{' || str[right] == '}')
 			{
@@ -172,8 +169,11 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 				addEmptyStatement(statementList);
 				addTokenToLastStatement(statementList, subsStr, CURLY_BRACKETS);
 				addEmptyStatement(statementList);
-				right++;
                 left = right;
+			}
+			else if(str[right] == ';')
+			{
+				addEmptyStatement(statementList);
 			}
 			else if (isOperator(str[right]) == true)
 			{
@@ -218,13 +218,14 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 				printf("'%s' IS NOT A VALID IDENTIFIER\n", subStr);
 				return -1;
 			}
-
-			left = right;
 			// If the delimter is a ; then create a new empty statement
 			if(str[right] == ';')
 			{
 				addEmptyStatement(statementList);
+				right++;
 			}
+			left = right;
+			
 		}
 	}
 	return 0;
