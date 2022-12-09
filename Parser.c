@@ -57,7 +57,7 @@ void push(Node* n,Node* v)
     n->len++;
 }
 
-void    parse(Node* v,int l,int r)
+void parse(Node* v,int l,int r)
 {
     if(l>r)
         return;

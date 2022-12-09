@@ -180,6 +180,7 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 				// printf("'%c' IS AN OPERATOR\n", str[right]);
 				char* subStr = subString(str, right, right);
 				addTokenToLastStatement(statementList, subStr, OPERATOR);
+				setStatementType(statementList, subStr);
 			}
 				
 
@@ -196,6 +197,7 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 			{
 				// printf("'%s' IS A KEYWORD\n", subStr);
 				addTokenToLastStatement(statementList, subStr, KEYWORD);
+				setStatementType(statementList, subStr);
 			}
 			else if (isInteger(subStr) == true)
 			{

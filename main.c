@@ -8,6 +8,7 @@
 #include "includes/tokens.h"
 #include "includes/tokenizer.h"
 #include "includes/variable.h"
+#include "includes/parser.h"
 
 #define MAX_CODE_LENGTH 100000
 #define MAX_STATEMENT_NUMBER 100
@@ -52,6 +53,13 @@ int main(int argc, char** argv) {
     }
     printAllStatments(&statementList);
 
+    Node* root = newNode("expr");
+    
+    parseRecursive(&statementList.list[2], root, 2, statementList.list[2].len - 1);
+
+    printf("Printing Parse Tree\n");
+    printRecursiveParseTree(root, NULL);
+    printf("\n");
     
     return 0;
 }
