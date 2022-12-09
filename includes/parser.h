@@ -264,3 +264,6 @@ void printRecursiveParseTree(Node* root, Node* parent)
 }
 
 #endif
+
+
+// [1[2][3]]
