@@ -268,11 +268,11 @@ void writeParseTree(Node* root, Node* parent) {
     fclose(ptr);
 }
 
-void parseAllStatements(StatementList* statementList, Node* root)
+// Returns the number of statements that are parsed i.e, the number of statements that can be skipped in the parseStatementsFrom function
+// Returns 0 if the statement is an IO or Assignment
+int parseStatement( StatementList* statementList,int index, Node* root)
 {
-    for(int i = 0; i < statementList->len; i++)
-    {
-        Statement *statement = &statementList->list[i];
+    Statement* statement = &statementList->list[index];
 
         if(statement->type == ASSIGNMENT)
         {
@@ -289,10 +289,43 @@ void parseAllStatements(StatementList* statementList, Node* root)
             pushChild(assignmentNode, expressionNode);
 
             parseExpression(statement, expressionNode, 2, statement->len - 1);
+            return 0;
         }
         else if(statement->type == FOR)
         {
-        
+            Node* forStmt = newNode("for-loop");
+            Node* forKeyword = newNode("for");
+            Node* openParanthesesNode = newNode("(");
+            Node* expression1 = newNode("expr");
+            Node* expression2 = newNode("expr");
+            Node* expression3 = newNode("expr");
+            Node* closedParanthesesNode = newNode(")");
+            Node* openCurlyBracketNode = newNode("{");
+            Node* snippetNode = newNode("snippet");
+            Node* closedCurlyBracketNode = newNode("}");
+
+            pushChild(root, forStmt);
+            pushChild(forStmt, forKeyword);
+            pushChild(forStmt, openParanthesesNode);
+            pushChild(forStmt, expression1);
+            pushChild(forStmt, expression2);
+            pushChild(forStmt, expression3);
+
+            parseStatement(statementList, index + 1, expression1);  // 1st Assignment statement inside for loop
+            parseExpression(&statementList->list[index + 2], expression2, 0, statementList->list[index + 2].len - 1);   // 2nd condition expression inside for loop
+            parseStatement(statementList, index + 3, expression3);  // 3rd Assignment statement inside for loop
+
+            pushChild(forStmt, closedParanthesesNode);
+            pushChild(forStmt, openCurlyBracketNode);
+            pushChild(forStmt, snippetNode);
+
+            int newIndex = index + 4;
+            while(!tokenEquals(&statementList->list[newIndex], "}") && newIndex < statementList->len)
+            {
+                parseStatement(statementList, newIndex, snippetNode);
+                newIndex++;
+            }
+            return newIndex - index;
         }
         else if(statement->type == IO)
         {
@@ -303,9 +336,22 @@ void parseAllStatements(StatementList* statementList, Node* root)
             pushChild(root, ioNode);
             pushChild(ioNode, ioTypeNode);
             pushChild(ioNode, terminalNode);
+            return 0;
         }
+}
 
+void parseStatementsFrom(StatementList* statementList, Node* root, int from, int to)
+{
+    for(int i = from; i <= to; i++)
+    {
+        Statement* statement = &statementList->list[i];
+        i += parseStatement(statementList, i, root);
     }
+}
+
+void parseAllStatements(StatementList* statementList, Node* root)
+{
+    parseStatementsFrom(statementList, root, 0, statementList->len);
 }
 
 

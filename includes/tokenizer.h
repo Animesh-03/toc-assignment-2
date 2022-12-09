@@ -172,7 +172,8 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 			else if(str[right] == '{' || str[right] == '}')
 			{
 				char* subsStr = subString(str, right, right);
-				addEmptyStatement(statementList);
+				if(str[right] == '{')
+					addEmptyStatement(statementList);
 				addTokenToLastStatement(statementList, subsStr, CURLY_BRACKETS);
 				addEmptyStatement(statementList);
 				foundCurlyBrace = 2;

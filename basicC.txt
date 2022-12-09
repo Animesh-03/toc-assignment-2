@@ -1,10 +1,7 @@
 int a,b,c;
 
-c =  a + b;
-write a;
-b = a * (b + c);
-a = a - b*c;
-
-
-
-write c;
+for(a = 0; 10 > a; a = a + 1)
+{
+    b = b*a;
+    c = (b + c)/a;
+}
