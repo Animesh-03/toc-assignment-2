@@ -137,6 +137,7 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 {
 	int left = 0, right = 0;
 	int len = strlen(str);
+	int foundCurlyBrace = 0, foundForKeyword = 0;
 
     // Run till entire code is read
 	while(right <= len && left <= right) {
@@ -162,6 +163,11 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 			{
 				char* subsStr = subString(str, right, right);
 				addTokenToLastStatement(statementList, subsStr, PARANTHESES);
+
+				if(str[right] == '(' && foundForKeyword)
+				{
+					addEmptyStatement(statementList);
+				}
 			}
 			else if(str[right] == '{' || str[right] == '}')
 			{
@@ -169,9 +175,9 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 				addEmptyStatement(statementList);
 				addTokenToLastStatement(statementList, subsStr, CURLY_BRACKETS);
 				addEmptyStatement(statementList);
-                left = right;
+				foundCurlyBrace = 2;
 			}
-			else if(str[right] == ';')
+			else if(str[right] == ';' && !foundCurlyBrace)
 			{
 				addEmptyStatement(statementList);
 			}
@@ -183,6 +189,8 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 				setStatementType(statementList, subStr);
 			}
 				
+			if(foundCurlyBrace)
+				foundCurlyBrace--;
 
 			right++;
 			left = right;
@@ -197,6 +205,11 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 			{
 				// printf("'%s' IS A KEYWORD\n", subStr);
 				addTokenToLastStatement(statementList, subStr, KEYWORD);
+
+				if(!strcmp(subStr, "for"))
+				{
+					foundForKeyword = 2;
+				}
 				setStatementType(statementList, subStr);
 			}
 			else if (isInteger(subStr) == true)
@@ -220,6 +233,12 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 				printf("'%s' IS NOT A VALID IDENTIFIER\n", subStr);
 				return -1;
 			}
+
+			if(foundForKeyword)
+			{
+				foundForKeyword--;
+			}
+
 			// If the delimter is a ; then create a new empty statement
 			if(str[right] == ';')
 			{
