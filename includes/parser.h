@@ -8,7 +8,7 @@
 #include "tokens.h"
 
 #define MAX_CHILD 20
-
+FILE* ptr;
 enum precedence {PR_LOGICAL, PR_SUM, PR_MULTIPLICATION, PR_VARCONST};
 typedef enum precedence Precedence;
 
@@ -197,7 +197,6 @@ void parseExpression(Statement *statement, Node* root, int left, int right)
     }
 
     Token* lowestPrecedenceToken = getTokenAt(statement, lowestPrecedenceIndex);
-    printf("%s\n", lowestPrecedenceToken->name);
     // Create linear tree to reach the required node in the grammar
     Node* newRoot = handleCascade(root, (Precedence)lowestPrecedence);
 
@@ -253,14 +252,20 @@ void parseExpression(Statement *statement, Node* root, int left, int right)
     }
 }
 
+void helper(Node* root, Node* parent) {
+    ptr = fopen("parse.txt", "w");
+    printRecursiveParseTree(root, parent);
+    fclose(ptr);
+}
+
 void printRecursiveParseTree(Node* root, Node* parent)
 {
-    printf("[%s", root->name);
+    fprintf(ptr, "[%s", root->name);
     for(int i = 0;i<root->len;i++)
     {
         printRecursiveParseTree(root->next[i],root);
     }
-    printf("]");
+    fprintf(ptr, "]");
 }
 
 #endif
