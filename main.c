@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
 
     Node* root = newNode("expr");
     
-    parseRecursive(&statementList.list[2], root, 2, statementList.list[2].len - 1);
+    parseExpression(&statementList.list[2], root, 2, statementList.list[2].len - 1);
 
     printf("Printing Parse Tree\n");
     printRecursiveParseTree(root, NULL);

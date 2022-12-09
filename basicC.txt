@@ -7,5 +7,6 @@ c =  c + a * (b + c) - a;
 
 write c;
 
+for(c = 1; 5 > c; c = c + 1) { a = a + c };
 
 write c;

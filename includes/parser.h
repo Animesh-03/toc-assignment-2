@@ -140,7 +140,7 @@ Node* handleCascade(Node* root, Precedence precedence)
     }
 }
 
-void parseRecursive(Statement *statement, Node* root, int left, int right)
+void parseExpression(Statement *statement, Node* root, int left, int right)
 {
     if(left > right)
     {
@@ -150,17 +150,20 @@ void parseRecursive(Statement *statement, Node* root, int left, int right)
     // Recursively parse the tokens in between the parentheses
     if(tokenEquals(getTokenAt(statement, left), "(") && tokenEquals(getTokenAt(statement, left), "("))
     {
-        Node* paranthesesNode = newNode("operand");             /*          operand         */
+        Node* paranthesesNode = handleCascade(root, PR_VARCONST);             /*          operand         */
         Node* leftParantheses = newNode("(");                   /*          /   |   \       */ 
         Node* expression = newNode("expr");                     /*         /    |    \      */
         Node* rightParantheses = newNode(")");                  /*        (    expr   )     */
 
+        if(!strcmp(root->name, "operand")) {
+            paranthesesNode = root;
+        }
+
         pushChild(paranthesesNode, leftParantheses);
         pushChild(paranthesesNode, expression);
         pushChild(paranthesesNode, rightParantheses);
-        pushChild(root, paranthesesNode);
 
-        parseRecursive(statement, expression, left + 1, right - 1);
+        parseExpression(statement, expression, left + 1, right - 1);
         return;
     }
 
@@ -175,7 +178,7 @@ void parseRecursive(Statement *statement, Node* root, int left, int right)
         {
             bracketDepth++;
         }
-        else if(tokenEquals(getTokenAt(statement, i), "("))
+        else if(tokenEquals(getTokenAt(statement, i), ")"))
         {
             bracketDepth--;
             continue;
@@ -194,6 +197,7 @@ void parseRecursive(Statement *statement, Node* root, int left, int right)
     }
 
     Token* lowestPrecedenceToken = getTokenAt(statement, lowestPrecedenceIndex);
+    printf("%s\n", lowestPrecedenceToken->name);
     // Create linear tree to reach the required node in the grammar
     Node* newRoot = handleCascade(root, (Precedence)lowestPrecedence);
 
@@ -208,8 +212,8 @@ void parseRecursive(Statement *statement, Node* root, int left, int right)
         pushChild(newRoot, logicalOperator);
         pushChild(newRoot, rightTerm);
 
-        parseRecursive(statement, leftExpression, left, lowestPrecedenceIndex - 1);
-        parseRecursive(statement, rightTerm, lowestPrecedenceIndex + 1, right);
+        parseExpression(statement, leftExpression, left, lowestPrecedenceIndex - 1);
+        parseExpression(statement, rightTerm, lowestPrecedenceIndex + 1, right);
     }
     else if(getPrecedence(lowestPrecedenceToken) == PR_SUM)
     {
@@ -221,8 +225,8 @@ void parseRecursive(Statement *statement, Node* root, int left, int right)
         pushChild(newRoot, logicalOperator);
         pushChild(newRoot, rightFactor);
 
-        parseRecursive(statement, leftTerm, left, lowestPrecedenceIndex - 1);
-        parseRecursive(statement, rightFactor, lowestPrecedenceIndex + 1, right);
+        parseExpression(statement, leftTerm, left, lowestPrecedenceIndex - 1);
+        parseExpression(statement, rightFactor, lowestPrecedenceIndex + 1, right);
     }
     else if(getPrecedence(lowestPrecedenceToken) == PR_MULTIPLICATION)
     {
@@ -234,8 +238,8 @@ void parseRecursive(Statement *statement, Node* root, int left, int right)
         pushChild(newRoot, logicalOperator);
         pushChild(newRoot, rightOperand);
 
-        parseRecursive(statement, leftFactor, left, lowestPrecedenceIndex - 1);
-        parseRecursive(statement, rightOperand, lowestPrecedenceIndex + 1, right);
+        parseExpression(statement, leftFactor, left, lowestPrecedenceIndex - 1);
+        parseExpression(statement, rightOperand, lowestPrecedenceIndex + 1, right);
     }
     else if(getPrecedence(lowestPrecedenceToken) == PR_VARCONST)
     {
