@@ -7,7 +7,7 @@
 
 #include "tokens.h"
 
-#define MAX_CHILD 20
+#define MAX_CHILD 30
 FILE* ptr;
 enum precedence {PR_LOGICAL, PR_SUM, PR_MULTIPLICATION, PR_VARCONST};
 typedef enum precedence Precedence;
@@ -148,12 +148,12 @@ void parseExpression(Statement *statement, Node* root, int left, int right)
     }
        
     // Recursively parse the tokens in between the parentheses
-    if(tokenEquals(getTokenAt(statement, left), "(") && tokenEquals(getTokenAt(statement, left), "("))
+    if(tokenEquals(getTokenAt(statement, left), "(") && tokenEquals(getTokenAt(statement, right), ")"))
     {
         Node* paranthesesNode = handleCascade(root, PR_VARCONST);             /*          operand         */
-        Node* leftParantheses = newNode("(");                   /*          /   |   \       */ 
-        Node* expression = newNode("expr");                     /*         /    |    \      */
-        Node* rightParantheses = newNode(")");                  /*        (    expr   )     */
+        Node* leftParantheses = newNode("(");                                 /*          /   |   \       */ 
+        Node* expression = newNode("expr");                                   /*         /    |    \      */
+        Node* rightParantheses = newNode(")");                                /*        (    expr   )     */
 
         if(!strcmp(root->name, "operand")) {
             paranthesesNode = root;
@@ -252,12 +252,6 @@ void parseExpression(Statement *statement, Node* root, int left, int right)
     }
 }
 
-void helper(Node* root, Node* parent) {
-    ptr = fopen("parse.txt", "w");
-    printRecursiveParseTree(root, parent);
-    fclose(ptr);
-}
-
 void printRecursiveParseTree(Node* root, Node* parent)
 {
     fprintf(ptr, "[%s", root->name);
@@ -267,6 +261,51 @@ void printRecursiveParseTree(Node* root, Node* parent)
     }
     fprintf(ptr, "]");
 }
+
+void writeParseTree(Node* root, Node* parent) {
+    ptr = fopen("parse.txt", "w");
+    printRecursiveParseTree(root, parent);
+    fclose(ptr);
+}
+
+void parseAllStatements(StatementList* statementList, Node* root)
+{
+    for(int i = 0; i < statementList->len; i++)
+    {
+        Statement *statement = &statementList->list[i];
+
+        if(statement->type == ASSIGNMENT)
+        {
+            Node* assignmentNode = newNode("assign_stmt");
+            Node* leftVar = newNode(statement->list[0].name);
+            Node* equalsNode = newNode("=");
+            Node* expressionNode = newNode("expr");
+
+            pushChild(root, assignmentNode);
+            pushChild(assignmentNode, leftVar);
+            pushChild(assignmentNode, equalsNode);
+            pushChild(assignmentNode, expressionNode);
+
+            parseExpression(statement, expressionNode, 2, statement->len - 1);
+        }
+        else if(statement->type == FOR)
+        {
+        
+        }
+        else if(statement->type == IO)
+        {
+            Node* ioNode = newNode((!strcmp(statement->list[0].name,"read")) ? strdup("read_stmt") : strdup("write_stmt"));
+            Node* ioTypeNode = newNode(statement->list[0].name);
+            Node* terminalNode = newNode(statement->list[1].name);
+
+            pushChild(root, ioNode);
+            pushChild(ioNode, ioTypeNode);
+            pushChild(ioTypeNode, terminalNode);
+        }
+
+    }
+}
+
 
 #endif
 

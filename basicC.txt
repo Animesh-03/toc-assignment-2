@@ -3,7 +3,7 @@ int a,b,c;
 read a;
 read b;
 
-c =  a > a * (b + c);
+c =  a > b > c;
 
 write c;
 

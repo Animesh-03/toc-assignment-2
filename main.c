@@ -53,12 +53,13 @@ int main(int argc, char** argv) {
     }
     printAllStatments(&statementList);
 
-    Node* root = newNode("expr");
+    Node* root = newNode("snippet");
     
-    parseExpression(&statementList.list[2], root, 2, statementList.list[2].len - 1);
+    // parseExpression(&statementList.list[2], root, 2, statementList.list[2].len - 1);
+    parseAllStatements(&statementList, root);
 
     printf("Printing Parse Tree\n");
-    helper(root, NULL);
+    writeParseTree(root, NULL);
     printf("\n");
     
     return 0;
