@@ -6,6 +6,7 @@
 #define VAR_ALREADY_EXISTS -1
 #define VAR_NOT_FOUND -2
 #define VAR_UPDATE_FAILED -3
+#define VAR_LEN 1000
 
 
 // Struct stores the value and name of the variable with a \n at the end to make it compatible with string functions
@@ -18,7 +19,7 @@ typedef struct variable Variable;
 
 // Struct stores the all the variables defined at the beginning of the program
 struct variableList {
-    Variable vars[20];
+    Variable vars[VAR_LEN];
     int len;  
 };
 

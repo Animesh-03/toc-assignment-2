@@ -1,0 +1,10 @@
+int a,b,c,d;
+
+read a;
+read b;
+
+c = a/b;
+c = c*b;
+a = a-c;
+
+write a;
