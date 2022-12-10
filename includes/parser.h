@@ -321,11 +321,34 @@ int parseStatement( StatementList* statementList,int index, Node* root)
             pushChild(forStmt, openCurlyBracketNode);
             pushChild(forStmt, snippetNode);
 
-            int newIndex = index + 4;
-            while(!tokenEquals(&statementList->list[newIndex], "}") && newIndex < statementList->len)
+            int newIndex = index + 5;
+            // while(!tokenEquals(&statementList->list[newIndex], "}") && newIndex < statementList->len)
+            // {
+            //     parseStatement(statementList, newIndex, snippetNode);
+            //     newIndex++;
+            // }
+            Node* rt = snippetNode;
+            int close;
+            for(close = newIndex; close < statementList->len; close++) {
+                if(tokenEquals(&statementList->list[close].list[0], "}")) break;
+            }
+
+            while(newIndex < close)
             {
-                parseStatement(statementList, newIndex, snippetNode);
+                newIndex += parseStatement(statementList, newIndex, rt);
+                Node* semi = newNode(";");
+                pushChild(rt, semi);
+                
+                if(newIndex < close - 1) {
+                    
+                    Node* rest = newNode("snippet");
+                    pushChild(rt, rest);
+
+                    rt = rest;
+                }
+
                 newIndex++;
+                
             }
             pushChild(forStmt, closedCurlyBracketNode);
             
@@ -337,6 +360,7 @@ int parseStatement( StatementList* statementList,int index, Node* root)
             Node* ioTypeNode = newNode(statement->list[0].name);
             Node* terminalNodeType = newNode((statement->list[1].type == VARIABLE) ? strdup("var") : strdup("const"));
             Node* terminalNode = newNode(statement->list[1].name);
+            Node* typeTerm = newNode(validIdentifier(terminalNode->name) ? "var": "const");
 
             pushChild(root, ioNode);
             pushChild(ioNode, ioTypeNode);
@@ -351,25 +375,27 @@ void parseStatementsFrom(StatementList* statementList, Node* root, int from, int
     Node* rt = root;
     for(int i = from; i <= to; i++)
     {
-        Statement* statement = &statementList->list[i];
+        // Statement* statement = &statementList->list[i];
+        Node* temp = rt;
         i += parseStatement(statementList, i, rt);
+        rt = temp;
 
         Node* semi = newNode(";");
         Node* rest = newNode("snippet");
+        pushChild(rt, semi);
 
         if(i < to) {
-            pushChild(rt, semi);
             pushChild(rt, rest);
-
             rt = rest;
-        }
+        } 
+
         
     }
 }
 
 void parseAllStatements(StatementList* statementList, Node* root)
 {
-    parseStatementsFrom(statementList, root, 0, statementList->len);
+    parseStatementsFrom(statementList, root, 0, statementList->len - 1);
 }
 
 
