@@ -296,9 +296,9 @@ int parseStatement( StatementList* statementList,int index, Node* root)
             Node* forStmt = newNode("for-loop");
             Node* forKeyword = newNode("for");
             Node* openParanthesesNode = newNode("(");
-            Node* expression1 = newNode("expr");
+            // Node* expression1 = newNode("assign-stmt");
             Node* expression2 = newNode("expr");
-            Node* expression3 = newNode("expr");
+            // Node* expression3 = newNode("assign-stmt");
             Node* closedParanthesesNode = newNode(")");
             Node* openCurlyBracketNode = newNode("{");
             Node* snippetNode = newNode("snippet");
@@ -307,13 +307,15 @@ int parseStatement( StatementList* statementList,int index, Node* root)
             pushChild(root, forStmt);
             pushChild(forStmt, forKeyword);
             pushChild(forStmt, openParanthesesNode);
-            pushChild(forStmt, expression1);
-            pushChild(forStmt, expression2);
-            pushChild(forStmt, expression3);
+            // pushChild(forStmt, expression1);
+            // pushChild(forStmt, expression3);
 
-            parseStatement(statementList, index + 1, expression1);  // 1st Assignment statement inside for loop
+            parseStatement(statementList, index + 1, forStmt);  // 1st Assignment statement inside for loop
+            pushChild(forStmt, newNode(";"));
+            pushChild(forStmt, expression2);
+            pushChild(forStmt, newNode(";"));
             parseExpression(&statementList->list[index + 2], expression2, 0, statementList->list[index + 2].len - 1);   // 2nd condition expression inside for loop
-            parseStatement(statementList, index + 3, expression3);  // 3rd Assignment statement inside for loop
+            parseStatement(statementList, index + 3, forStmt);  // 3rd Assignment statement inside for loop
 
             pushChild(forStmt, closedParanthesesNode);
             pushChild(forStmt, openCurlyBracketNode);
@@ -344,10 +346,22 @@ int parseStatement( StatementList* statementList,int index, Node* root)
 
 void parseStatementsFrom(StatementList* statementList, Node* root, int from, int to)
 {
+    Node* rt = root;
     for(int i = from; i <= to; i++)
     {
         Statement* statement = &statementList->list[i];
-        i += parseStatement(statementList, i, root);
+        i += parseStatement(statementList, i, rt);
+
+        Node* semi = newNode(";");
+        Node* rest = newNode("snippet");
+
+        if(i < to) {
+            pushChild(rt, semi);
+            pushChild(rt, rest);
+
+            rt = rest;
+        }
+        
     }
 }
 

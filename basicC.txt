@@ -1,7 +1,9 @@
 int a,b,c;
 
-for(a = 0; 10 > a; a = a + 1)
-{
-    b = (b*a);
-    c = (b + c)/a;
-}
+read a;
+
+b = a + 10;
+
+c = b > 2 * a;
+
+write c;
