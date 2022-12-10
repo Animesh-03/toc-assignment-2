@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
     int declareStatus = tokenizeVariables(declareStatement, &varList);
     if(declareStatus != 0)
     {
-        printf("Declaration Statement is Incorrect. Exiting\n");
+        // printf("Declaration Statement is Incorrect. Exiting\n");
         f = fopen(filename, "r");
         // return 1;
     }

@@ -322,7 +322,7 @@ int parseStatement( StatementList* statementList,int index, Node* root)
             pushChild(forStmt, snippetNode);
 
             int newIndex = index + 4;
-            while(!tokenEquals(&statementList->list[newIndex], "}") && newIndex < statementList->len)
+            while(!tokenEquals(&statementList->list[newIndex].list[0], "}") && newIndex < statementList->len)
             {
                 parseStatement(statementList, newIndex, snippetNode);
                 newIndex++;
