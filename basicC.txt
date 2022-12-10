@@ -7,3 +7,4 @@ b = a + 10;
 c = b > 2 * a;
 
 write c;
+write 10;

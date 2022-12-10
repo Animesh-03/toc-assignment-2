@@ -335,11 +335,13 @@ int parseStatement( StatementList* statementList,int index, Node* root)
         {
             Node* ioNode = newNode((!strcmp(statement->list[0].name,"read")) ? strdup("read_stmt") : strdup("write_stmt"));
             Node* ioTypeNode = newNode(statement->list[0].name);
+            Node* terminalNodeType = newNode((statement->list[1].type == VARIABLE) ? strdup("var") : strdup("const"));
             Node* terminalNode = newNode(statement->list[1].name);
 
             pushChild(root, ioNode);
             pushChild(ioNode, ioTypeNode);
-            pushChild(ioNode, terminalNode);
+            pushChild(ioNode, terminalNodeType);
+            pushChild(terminalNodeType, terminalNode);
             return 0;
         }
 }
