@@ -40,7 +40,8 @@ int main(int argc, char** argv) {
     if(declareStatus != 0)
     {
         printf("Declaration Statement is Incorrect. Exiting\n");
-        return 1;
+        f = fopen(filename, "r");
+        // return 1;
     }
     printAllVariables(&varList);
 
