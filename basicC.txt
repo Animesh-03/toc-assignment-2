@@ -8,7 +8,7 @@ c = a + b;
 
 for(c = a + b; c > 0; c = c - 1)
 {
-    a = a + ( b * c);
+    d = a + ( b * c);
 }
 
 write a;

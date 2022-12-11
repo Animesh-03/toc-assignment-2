@@ -221,12 +221,6 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 			else if (validIdentifier(subStr) == true && isDelimiter(str[right - 1]) == false)
 			{
 				// printf("'%s' IS A VALID IDENTIFIER\n", subStr);
-				int varExists = findVariable(varList, subStr);
-				if(varExists == VAR_NOT_FOUND)
-				{
-					printf("The variable '%s' is not found.\n", subStr);
-					return -1;
-				}
 				addTokenToLastStatement(statementList, subStr, VARIABLE);
 			}
 			else if (validIdentifier(subStr) == false && isDelimiter(str[right - 1]) == false)

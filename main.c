@@ -48,11 +48,11 @@ int main(int argc, char** argv) {
 
     fread(codeStr, MAX_CODE_LENGTH, 1, f);
     int compileStatus = tokenizeStatements(codeStr, &statementList, &varList);
-    if(compileStatus != 0)
-    {
-        printf("Compilation Failed. Exiting\n");
-        return 1;
-    }
+    // if(compileStatus != 0)
+    // {
+    //     printf("Compilation Failed. Exiting\n");
+    //     return 1;
+    // }
     printAllStatments(&statementList);
 
     Node* root = newNode("snippet");

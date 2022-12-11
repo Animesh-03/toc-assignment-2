@@ -30,14 +30,24 @@ int simulate(Node* root, VariableList* varList)
 
     if(nodeEquals(root->name,"assign_stmt"))
     {
-        int rhs = simulate(root->next[2], varList);                 // Get the value of the rhs in the assignment statement
-        updateVariable(varList,root->next[0]->next[0]->name,rhs);   // Update the variable on LHS to the value of the expression obtained above
+        int rhs = simulate(root->next[2], varList);                              // Get the value of the rhs in the assignment statement
+        int status = updateVariable(varList,root->next[0]->next[0]->name,rhs);   // Update the variable on LHS to the value of the expression obtained above
+        if(status == VAR_UPDATE_FAILED)
+        {
+            printf("Variable %s not found\n", root->next[0]->next[0]->name);
+            exit(1);
+        }
     }
     else if(nodeEquals(root->name,"read_stmt"))
     {
         int tmp;
-        scanf("%d",&tmp);                                           // Read the value of the input from console
-        updateVariable(varList,root->next[1]->next[0]->name,tmp);   // Update the variable on the RHS to the value
+        scanf("%d",&tmp);                                                        // Read the value of the input from console
+        int status = updateVariable(varList,root->next[1]->next[0]->name,tmp);   // Update the variable on the RHS to the value
+        if(status == VAR_UPDATE_FAILED)
+        {
+            printf("Variable %s not found\n", root->next[1]->next[0]->name);
+            exit(1);
+        }
     }
     else if(nodeEquals(root->name,"write_stmt"))
     {
@@ -57,7 +67,13 @@ int simulate(Node* root, VariableList* varList)
     {
         if(nodeEquals(root->name,"var"))
         {
-            return getVariableVal(varList , root->next[0]->name);   // Returns the variable value stored in the token
+            int val = getVariableVal(varList , root->next[0]->name);
+            if(val == VAR_NOT_FOUND)
+            {
+                printf("Variable %s not found\n", root->next[0]->name);
+                exit(1);
+            }
+            return val;   // Returns the variable value stored in the token
         }
         else if(nodeEquals(root->name,"const"))
         {
