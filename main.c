@@ -9,6 +9,7 @@
 #include "includes/tokenizer.h"
 #include "includes/variable.h"
 #include "includes/parser.h"
+#include "includes/simulate.h"
 
 #define MAX_CODE_LENGTH 100000
 #define MAX_STATEMENT_NUMBER 100
@@ -43,7 +44,7 @@ int main(int argc, char** argv) {
         f = fopen(filename, "r");
         // return 1;
     }
-    printAllVariables(&varList);
+    
 
     fread(codeStr, MAX_CODE_LENGTH, 1, f);
     int compileStatus = tokenizeStatements(codeStr, &statementList, &varList);
@@ -63,11 +64,15 @@ int main(int argc, char** argv) {
     writeParseTree(root, NULL);
     printf("\n");
 
+    printf("Output:\n");
+    simulate(root, &varList);
+    printAllVariables(&varList);
+
     
-    f = fopen(filename, "r");
-    fread(codeStr, MAX_CODE_LENGTH, 1, f);
-    tokenizeStatementsV2(codeStr, &syntaxCheckList, &syntaxCheckVarList);
-    printAllStatments(&syntaxCheckList);
+    // f = fopen(filename, "r");
+    // fread(codeStr, MAX_CODE_LENGTH, 1, f);
+    // tokenizeStatementsV2(codeStr, &syntaxCheckList, &syntaxCheckVarList);
+    // printAllStatments(&syntaxCheckList);
     
     return 0;
 }
