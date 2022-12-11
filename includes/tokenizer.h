@@ -287,13 +287,21 @@ void tokenizeStatementsV2(char* str, StatementList* statementList, VariableList*
 			{
 				char* subsStr = subString(str, right, right);
 				if(str[right] == '{')
+				{
 					addEmptyStatement(statementList);
-				addTokenToLastStatement(statementList, subsStr, CURLY_BRACKETS);
-				addEmptyStatement(statementList);
-				foundCurlyBrace = 2;
+					foundCurlyBrace = 2;
+					addTokenToLastStatement(statementList, subsStr, CURLY_BRACKETS);
+					addEmptyStatement(statementList);
+				}
+				else if(str[right] == '}')
+				{
+					addTokenToLastStatement(statementList, subsStr, CURLY_BRACKETS);
+				}
+				
 			}
 			else if(str[right] == ';' && !foundCurlyBrace)
 			{
+				addTokenToLastStatement(statementList, ";", NA);
 				addEmptyStatement(statementList);
 			}
 			else if (isOperator(str[right]) == true)

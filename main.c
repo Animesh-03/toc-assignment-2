@@ -69,10 +69,10 @@ int main(int argc, char** argv) {
     printAllVariables(&varList);
 
     
-    // f = fopen(filename, "r");
-    // fread(codeStr, MAX_CODE_LENGTH, 1, f);
-    // tokenizeStatementsV2(codeStr, &syntaxCheckList, &syntaxCheckVarList);
-    // printAllStatments(&syntaxCheckList);
+    f = fopen(filename, "r");
+    fread(codeStr, MAX_CODE_LENGTH, 1, f);
+    tokenizeStatementsV2(codeStr, &syntaxCheckList, &syntaxCheckVarList);
+    printAllStatments(&syntaxCheckList);
     
     return 0;
 }
