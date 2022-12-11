@@ -1,7 +1,14 @@
-int a, b;
+int a,b,c;
 
-for(b = 0; 10 > b; b = b + 1) {
-    read a;
-    read b;
-    write a;
-};
+
+read a;
+read b;
+
+c = a + b;
+
+for(c = a + b; c > 0; c = c - 1)
+{
+    a = a + 1;
+}
+
+read a;

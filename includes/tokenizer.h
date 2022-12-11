@@ -253,4 +253,124 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 	return 0;
 }
 
+void tokenizeStatementsV2(char* str, StatementList* statementList, VariableList* varList)
+{
+	int left = 0, right = 0;
+	int len = strlen(str);
+	int foundCurlyBrace = 0, foundForKeyword = 0;
+
+    // Run till entire code is read
+	while(right <= len && left <= right) {
+
+        // If the current char is not a delimiter then increase the range of string to the right
+		if(isDelimiter(str[right]) == false)
+        {
+            right++;
+        }
+			
+
+        // If the current char is an operator (which is also a delimiter) then classify it as an operator
+		if(isDelimiter(str[right]) == true && left == right) 
+        {
+            if(str[right] == '=' && str[right+1] == '=')
+            {
+                right++;
+				char* subsStr = subString(str, left, right);
+                // printf("'%s' is a logical equals operator\n", subsStr);
+				addTokenToLastStatement(statementList, subsStr, OPERATOR);
+            }
+			else if(str[right] == '(' || str[right] == ')')
+			{
+				char* subsStr = subString(str, right, right);
+				addTokenToLastStatement(statementList, subsStr, PARANTHESES);
+
+				if(str[right] == '(' && foundForKeyword)
+				{
+					addEmptyStatement(statementList);
+				}
+			}
+			else if(str[right] == '{' || str[right] == '}')
+			{
+				char* subsStr = subString(str, right, right);
+				if(str[right] == '{')
+					addEmptyStatement(statementList);
+				addTokenToLastStatement(statementList, subsStr, CURLY_BRACKETS);
+				addEmptyStatement(statementList);
+				foundCurlyBrace = 2;
+			}
+			else if(str[right] == ';' && !foundCurlyBrace)
+			{
+				addEmptyStatement(statementList);
+			}
+			else if (isOperator(str[right]) == true)
+			{
+				// printf("'%c' IS AN OPERATOR\n", str[right]);
+				char* subStr = subString(str, right, right);
+				addTokenToLastStatement(statementList, subStr, OPERATOR);
+				setStatementType(statementList, subStr);
+			}
+				
+			if(foundCurlyBrace)
+				foundCurlyBrace--;
+
+			right++;
+			left = right;
+		}
+        // If current string is a delimiter and length of current string i.e, str[left:right-1] > 1 then it must be one of variable, integer or keyword
+        else if(isDelimiter(str[right]) == true && left != right || (right == len && left != right)) 
+        {
+            // Get the current sub-string i.e string[left:right-1]
+			char* subStr = subString(str, left, right - 1);
+
+			if (isKeyword(subStr) == true)
+			{
+				// printf("'%s' IS A KEYWORD\n", subStr);
+				addTokenToLastStatement(statementList, subStr, KEYWORD);
+
+				if(!strcmp(subStr, "for"))
+				{
+					foundForKeyword = 2;
+				}
+				setStatementType(statementList, subStr);
+			}
+			else if (isInteger(subStr) == true)
+			{
+				// printf("'%s' IS AN INTEGER\n", subStr);
+				addTokenToLastStatement(statementList, subStr, CONSTANT);
+			}
+			else if (validIdentifier(subStr) == true && isDelimiter(str[right - 1]) == false)
+			{
+				// printf("'%s' IS A VALID IDENTIFIER\n", subStr);
+				addTokenToLastStatement(statementList, subStr, VARIABLE);
+			}
+			else if (validIdentifier(subStr) == false && isDelimiter(str[right - 1]) == false)
+			{
+				printf("'%s' IS NOT A VALID IDENTIFIER\n", subStr);
+				return -1;
+			}
+
+			if(foundForKeyword)
+			{
+				foundForKeyword--;
+			}
+
+			// If the delimter is a ; then create a new empty statement
+			if(str[right] == ';')
+			{
+				addTokenToLastStatement(statementList,";", NA);
+				addEmptyStatement(statementList);
+				right++;
+			}
+			else if(str[right] == ',')
+			{
+				addTokenToLastStatement(statementList, ",", NA);
+				right++;
+			}
+			left = right;
+		}
+	}
+	return 0;
+
+}
+
 #endif

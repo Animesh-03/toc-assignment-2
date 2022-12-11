@@ -16,10 +16,10 @@
 char* filename;
 FILE* f;
 
-StatementList statementList;
+StatementList statementList, syntaxCheckList;
 int nStatements = 0;
 
-VariableList varList;
+VariableList varList, syntaxCheckVarList;
 
 int main(int argc, char** argv) {
 
@@ -62,6 +62,12 @@ int main(int argc, char** argv) {
     printf("Printing Parse Tree\n");
     writeParseTree(root, NULL);
     printf("\n");
+
+    
+    f = fopen(filename, "r");
+    fread(codeStr, MAX_CODE_LENGTH, 1, f);
+    tokenizeStatementsV2(codeStr, &syntaxCheckList, &syntaxCheckVarList);
+    printAllStatments(&syntaxCheckList);
     
     return 0;
 }
