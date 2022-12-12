@@ -35,7 +35,7 @@ int checkDeclareStatementSyntax(Statement* declareStatement)
     return 0;
 }
 
-int checkExpressionSyntax(Statement* statement, int start)
+int checkExpressionSyntax(Statement* statement, int start, int ignoreSemiColon)
 {
     if((statement->len - start)%2 == 1)
     {
@@ -75,7 +75,7 @@ int checkExpressionSyntax(Statement* statement, int start)
         }
     }
 
-    if(bracketDepth != 0 || statement->list[statement->len - 1].type != SEMI_COLON)
+    if(bracketDepth != 0 || (ignoreSemiColon && statement->list[statement->len - 1].type != SEMI_COLON))
     {
         return -1;
     }
@@ -83,7 +83,7 @@ int checkExpressionSyntax(Statement* statement, int start)
     return 0;
 }
 
-int checkAssignmentStatementSyntax(Statement* statement)
+int checkAssignmentStatementSyntax(Statement* statement, int ignoreSemiColon)
 {
     if(statement->len < 4)
     {
@@ -93,7 +93,7 @@ int checkAssignmentStatementSyntax(Statement* statement)
     {
         return -1;
     }
-    if(checkExpressionSyntax(statement, 2) == -1)
+    if(checkExpressionSyntax(statement, 2, ignoreSemiColon) == -1)
     {
         return -1;
     }
@@ -127,9 +127,9 @@ int checkForLoopSyntax(StatementList* syntaxCheckList, int* statementCursor)
         return -1;
     }
 
-    if( checkAssignmentStatementSyntax(&syntaxCheckList->list[*statementCursor + 1]) == -1 || 
-        checkExpressionSyntax(&syntaxCheckList->list[*statementCursor + 2], 0) == -1 ||
-        checkAssignmentStatementSyntax(&syntaxCheckList->list[*statementCursor + 3]) == -1
+    if( checkAssignmentStatementSyntax(&syntaxCheckList->list[*statementCursor + 1], 0) == -1 || 
+        checkExpressionSyntax(&syntaxCheckList->list[*statementCursor + 2], 0, 0) == -1 ||
+        checkAssignmentStatementSyntax(&syntaxCheckList->list[*statementCursor + 3],1) == -1
     )
     {
         return -1;
@@ -169,7 +169,7 @@ int checkSyntaxForStatement(StatementList* syntaxCheckList , Statement* statemen
 {
     if(statement->type == ASSIGNMENT)
         {
-            if(checkAssignmentStatementSyntax(statement) == -1)
+            if(checkAssignmentStatementSyntax(statement, 0) == -1)
             {
                 printf("Statement #%d invalid\n", *statementCursor + 1);
                 return -1;
