@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
     fread(codeStr, MAX_CODE_LENGTH, 1, f);
     int compileStatus = tokenizeStatements(codeStr, &statementList, &varList);
 
-    printAllStatments(&statementList);
+    // printAllStatments(&statementList);
 
       
     parseAllStatements(&statementList, root);
@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
     f = fopen(filename, "r");
     fread(codeStr, MAX_CODE_LENGTH, 1, f);
     tokenizeStatementsV2(codeStr, &syntaxCheckList, &syntaxCheckVarList);
-    // printAllStatments(&syntaxCheckList);
+    printAllStatments(&syntaxCheckList);
 
     if(checkSyntax(&syntaxCheckList, 0) == -1)
     {
