@@ -296,9 +296,7 @@ int parseStatement( StatementList* statementList,int index, Node* root)
             Node* forStmt = newNode("for-loop");
             Node* forKeyword = newNode("for");
             Node* openParanthesesNode = newNode("(");
-            // Node* expression1 = newNode("assign-stmt");
             Node* expression2 = newNode("expr");
-            // Node* expression3 = newNode("assign-stmt");
             Node* closedParanthesesNode = newNode(")");
             Node* openCurlyBracketNode = newNode("{");
             Node* snippetNode = newNode("snippet");
@@ -307,8 +305,6 @@ int parseStatement( StatementList* statementList,int index, Node* root)
             pushChild(root, forStmt);
             pushChild(forStmt, forKeyword);
             pushChild(forStmt, openParanthesesNode);
-            // pushChild(forStmt, expression1);
-            // pushChild(forStmt, expression3);
 
             parseStatement(statementList, index + 1, forStmt);  // 1st Assignment statement inside for loop
             pushChild(forStmt, newNode(";"));

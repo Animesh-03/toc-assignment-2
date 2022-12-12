@@ -247,7 +247,7 @@ int tokenizeStatements(char* str, StatementList* statementList, VariableList* va
 	return 0;
 }
 
-void tokenizeStatementsV2(char* str, StatementList* statementList, VariableList* varList)
+int tokenizeStatementsV2(char* str, StatementList* statementList, VariableList* varList)
 {
 	int left = 0, right = 0;
 	int len = strlen(str);
@@ -301,8 +301,13 @@ void tokenizeStatementsV2(char* str, StatementList* statementList, VariableList*
 			}
 			else if(str[right] == ';' && !foundCurlyBrace)
 			{
-				addTokenToLastStatement(statementList, ";", NA);
+				addTokenToLastStatement(statementList, ";", SEMI_COLON);
 				addEmptyStatement(statementList);
+			}
+			else if(str[right] == ',')
+			{
+				addTokenToLastStatement(statementList, ",", COMA);
+				right++;
 			}
 			else if (isOperator(str[right]) == true)
 			{
@@ -359,13 +364,13 @@ void tokenizeStatementsV2(char* str, StatementList* statementList, VariableList*
 			// If the delimter is a ; then create a new empty statement
 			if(str[right] == ';')
 			{
-				addTokenToLastStatement(statementList,";", NA);
+				addTokenToLastStatement(statementList,";", SEMI_COLON);
 				addEmptyStatement(statementList);
 				right++;
 			}
 			else if(str[right] == ',')
 			{
-				addTokenToLastStatement(statementList, ",", NA);
+				addTokenToLastStatement(statementList, ",", COMA);
 				right++;
 			}
 			left = right;

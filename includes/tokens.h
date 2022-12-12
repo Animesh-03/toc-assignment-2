@@ -4,7 +4,7 @@
 #include <string.h>
 
 // The types a token can be
-enum TokenType {KEYWORD, VARIABLE, CONSTANT, PARANTHESES, CURLY_BRACKETS, OPERATOR};
+enum TokenType {KEYWORD, VARIABLE, CONSTANT, PARANTHESES, CURLY_BRACKETS, OPERATOR, COMA, SEMI_COLON};
 enum StatementType {NA ,ASSIGNMENT, FOR, IO};
 
 typedef enum TokenType TokenType;
