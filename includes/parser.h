@@ -389,6 +389,11 @@ void parseStatementsFrom(StatementList* statementList, Node* root, int from, int
     }
 }
 
+void parseVariables(VariableList* varList)
+{
+    
+}
+
 void parseAllStatements(StatementList* statementList, Node* root)
 {
     parseStatementsFrom(statementList, root, 0, statementList->len - 1);

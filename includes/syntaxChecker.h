@@ -75,7 +75,10 @@ int checkExpressionSyntax(Statement* statement, int start, int ignoreSemiColon)
         }
     }
 
-    if(bracketDepth != 0 || (ignoreSemiColon && statement->list[statement->len - 1].type != SEMI_COLON))
+    if(ignoreSemiColon == 1)
+        return 0;
+
+    if(bracketDepth != 0 || ( statement->list[statement->len - 1].type != SEMI_COLON))
     {
         return -1;
     }
@@ -135,10 +138,10 @@ int checkForLoopSyntax(StatementList* syntaxCheckList, int* statementCursor)
         return -1;
     }
 
-    if(syntaxCheckList->list[*statementCursor + 4].len != 1 || !tokenEquals(&syntaxCheckList->list[*statementCursor + 4].list[0], ")"))
-    {
-        return -1;
-    }
+    // if(syntaxCheckList->list[*statementCursor + 4].len != 1 || !tokenEquals(&syntaxCheckList->list[*statementCursor + 4].list[0], ")"))
+    // {
+    //     return -1;
+    // }
 
     *statementCursor += 5;
     Statement* statement = &syntaxCheckList->list[*statementCursor];
