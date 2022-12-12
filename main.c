@@ -54,6 +54,7 @@ int main(int argc, char** argv) {
     }
     else
     {
+        
         parseVariables(&varList, program);
     }
     pushChild(program, root);
@@ -73,6 +74,19 @@ int main(int argc, char** argv) {
     f = fopen(filename, "r");
     fread(codeStr, MAX_CODE_LENGTH, 1, f);
     tokenizeStatementsV2(codeStr, &syntaxCheckList, &syntaxCheckVarList);
+    int c = -1;
+    for(int i = 0;i<syntaxCheckList.len;i++)
+    {
+        if(!strcmp(syntaxCheckList.list[i].list[0].name,"int"))
+        {
+            if(c!=-1)
+            {
+                printf("Multiple Declare statements.\n");
+                return -1;
+            }
+            c = i;
+        }
+    }
     printAllStatments(&syntaxCheckList);
 
     if(checkSyntax(&syntaxCheckList, 0) == -1)
