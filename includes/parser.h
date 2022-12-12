@@ -389,9 +389,30 @@ void parseStatementsFrom(StatementList* statementList, Node* root, int from, int
     }
 }
 
-void parseVariables(VariableList* varList)
+void parseVariables(VariableList* varList, Node* root)
 {
-    
+    pushChild(root, newNode("int"));
+    Node* oldRoot = root;
+
+    Node* varListNode;
+    Node * prev;
+    for(int i = 0; i < varList->len; i++)
+    {
+        Node* varName = newNode(varList->vars[i].name);
+        varListNode = newNode("var-list");
+        Node* varNode = newNode("var");
+
+        pushChild(root, varListNode);
+        pushChild(varListNode, varNode);
+        pushChild(varListNode, newNode(","));
+        pushChild(varNode, varName);
+        root = varListNode;
+    }
+    root->len--;
+    // Node* lastNode = newNode("var");
+    // pushChild(root, lastNode);
+    // pushChild(lastNode, newNode(varList->vars[varList->len - 1].name));
+    // pushChild(oldRoot, newNode(";"));
 }
 
 void parseAllStatements(StatementList* statementList, Node* root)

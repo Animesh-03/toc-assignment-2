@@ -39,39 +39,41 @@ int main(int argc, char** argv) {
 
     fgets(declareStatement, 100, f);
     int declareStatus = tokenizeVariables(declareStatement, &varList);
+
     Node* root = newNode("snippet");
+    Node* program = newNode("program");
+    
+
     if(declareStatus != 0)
     {
         // printf("Declaration Statement is Incorrect. Exiting\n");
         f = fopen(filename, "r");
-        root = newNode("non-empty-snippet");
+        // root = newNode("nonempty-snippet");
+        
         // return 1;
     }
+    else
+    {
+        parseVariables(&varList, program);
+    }
+    pushChild(program, root);
     
 
     fread(codeStr, MAX_CODE_LENGTH, 1, f);
     int compileStatus = tokenizeStatements(codeStr, &statementList, &varList);
-    // if(compileStatus != 0)
-    // {
-    //     printf("Compilation Failed. Exiting\n");
-    //     return 1;
-    // }
+
     printAllStatments(&statementList);
 
-    Node* program = newNode("program");
-    
-
-    
+      
     parseAllStatements(&statementList, root);
 
-    printf("Printing Parse Tree\n");
-    writeParseTree(root, NULL);
+    writeParseTree(program, NULL);
     printf("\n");
 
     f = fopen(filename, "r");
     fread(codeStr, MAX_CODE_LENGTH, 1, f);
     tokenizeStatementsV2(codeStr, &syntaxCheckList, &syntaxCheckVarList);
-    printAllStatments(&syntaxCheckList);
+    // printAllStatments(&syntaxCheckList);
 
     if(checkSyntax(&syntaxCheckList, 0) == -1)
     {
@@ -83,7 +85,7 @@ int main(int argc, char** argv) {
     printAllVariables(&varList);
 
     
-    
+    printf("Printing Parse Tree\n");
     
     return 0;
 }
