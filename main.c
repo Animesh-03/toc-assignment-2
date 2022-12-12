@@ -39,10 +39,12 @@ int main(int argc, char** argv) {
 
     fgets(declareStatement, 100, f);
     int declareStatus = tokenizeVariables(declareStatement, &varList);
+    Node* root = newNode("snippet");
     if(declareStatus != 0)
     {
         // printf("Declaration Statement is Incorrect. Exiting\n");
         f = fopen(filename, "r");
+        root = newNode("non-empty-snippet");
         // return 1;
     }
     
@@ -56,9 +58,10 @@ int main(int argc, char** argv) {
     // }
     printAllStatments(&statementList);
 
-    Node* root = newNode("snippet");
+    Node* program = newNode("program");
     
-    // parseExpression(&statementList.list[2], root, 2, statementList.list[2].len - 1);
+
+    
     parseAllStatements(&statementList, root);
 
     printf("Printing Parse Tree\n");
