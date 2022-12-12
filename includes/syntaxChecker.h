@@ -194,6 +194,16 @@ int checkSyntaxForStatement(StatementList* syntaxCheckList , Statement* statemen
 
 int checkSyntax(StatementList* syntaxCheckList, int statementCursor)
 {
+
+    for(int j = 0; j < syntaxCheckList->len; j++)
+    {
+        if(tokenEquals(&syntaxCheckList->list[j].list[0], ")"))
+        {
+            printf("Statement #%d invalid\n", j + 1);
+            return -1;
+        }
+    }
+
     if(tokenEquals(&syntaxCheckList->list[0].list[0], "int"))
     {
         if(checkDeclareStatementSyntax(&syntaxCheckList->list[0]) == -1)
@@ -207,6 +217,7 @@ int checkSyntax(StatementList* syntaxCheckList, int statementCursor)
     while(statementCursor < syntaxCheckList->len)
     {
         Statement* statement = &syntaxCheckList->list[statementCursor];
+
         if(checkSyntaxForStatement(syntaxCheckList, statement, &statementCursor))
         {
             printf("Statement #%d invalid\n", statementCursor + 1);

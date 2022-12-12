@@ -1,6 +1,10 @@
 int a, b;
-int a;
-write a;
+a = 10;
+
+for(a = 10; a > 0; a = a - 1;)
+{
+    write a;
+};
 
 
 
